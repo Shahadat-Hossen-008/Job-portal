@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext/AuthContext";
-
+import icon from "../../assets/jobicon100.png"
 function Navbar() {
   const {signOutUser, user} = useContext(AuthContext);
   const handleSignOut = () =>{
@@ -18,7 +18,7 @@ function Navbar() {
   }
     const links = <>
          <li>
-              <a>Item 1</a>
+              <NavLink to={'/'}>Home</NavLink>
             </li>
             <li>
               <a>Parent</a>
@@ -28,9 +28,10 @@ function Navbar() {
             </li>
     </>
   return (
-    <div className="navbar bg-base-100 w-11/12 mx-auto space-y-5 font-lato">
+    <div className="navbar w-11/12 mx-auto space-y-5 font-lato">
       <div className="navbar-start">
-        <a className="btn btn-ghost text-xl">Job Portal</a>
+      <img src={icon} className="w-[40px]" />
+        <Link to={'/'} className="text-xl">Job Portal</Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">

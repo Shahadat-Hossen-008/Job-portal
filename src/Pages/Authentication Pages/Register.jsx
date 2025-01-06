@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash, FaRegCheckCircle, FaRegCircle } from "react-icons/fa
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext/AuthContext";
+import GoogleLogin from "../Shared/SocialLogin/GoogleLogin";
 function Register() {
   const{createUser, setUser} = useContext(AuthContext);
   const [seePassword, setSeePassword] = useState(true);
@@ -37,12 +38,12 @@ function Register() {
     })
   }
   return (
-    <div className="hero bg-base-200 min-h-screen">
+    <div className="hero bg-base-100 min-h-screen py-20">
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center w-[400px]">
           <Lottie animationData={registerLottie}></Lottie>
         </div>
-        <div className="card bg-base-100 w-full max-w-sm shadow-2xl p-5">
+        <div className="card bg-amber-50 w-full max-w-sm shadow-lg p-5">
           <h1 className="text-2xl font-bold text-center font-poppins">Register</h1>
           <form 
           onSubmit={handleSubmit(onSubmit)}
@@ -122,7 +123,7 @@ function Register() {
               >
                 {seePassword ? <FaEyeSlash />: <FaEye /> }
               </button>
-              {errors.password && <span>{errors.password.message}</span>}
+              {errors.password && <span className="text-red-600">{errors.password.message}</span>}
               <div className="p-2 mt-3 bg-orange-100 rounded-xl">
               <div className={` ${lowerCaseValidate ? "text-green-600 flex items-center gap-3":"text-black flex items-center gap-3"}`}>
               {lowerCaseValidate ? <FaRegCheckCircle /> : <FaRegCircle/>}
@@ -142,6 +143,7 @@ function Register() {
             </div>
             <p>Already have an account, Please <Link to="/login" className="text-blue-400">Sign In</Link></p>
           </form>
+          <GoogleLogin></GoogleLogin>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext/AuthContext";
+import GoogleLogin from "../Shared/SocialLogin/GoogleLogin";
 
 function Login() {
     const {signIn, setUser} = useContext(AuthContext);
@@ -30,12 +31,12 @@ function Login() {
         
       }
   return (
-    <div className="hero bg-base-200 min-h-screen">
+    <div className="hero bg-base-100 min-h-screen py-20">
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center w-[400px]">
           <Lottie animationData={LoginLottie}></Lottie>
         </div>
-        <div className="card bg-base-100 w-full max-w-sm shadow-2xl p-5">
+        <div className="card bg-amber-50 w-full max-w-sm shadow-lg p-5">
           <h1 className="text-2xl font-bold text-center font-poppins">
             Login
           </h1>
@@ -112,6 +113,7 @@ function Login() {
               </Link>
             </p>
           </form>
+          <GoogleLogin></GoogleLogin>
         </div>
       </div>
     </div>
