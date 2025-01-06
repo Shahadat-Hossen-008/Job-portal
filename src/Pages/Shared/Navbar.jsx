@@ -1,8 +1,21 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../Context/AuthContext/AuthContext";
 
 function Navbar() {
+  const {signOutUser, user} = useContext(AuthContext);
+  const handleSignOut = () =>{
+    signOutUser()
+    .then(() =>{
+      console.log("Sign Out Successful");
+      
+    })
+    .catch(err =>{
+      console.log("Error occur");
+      
+    })
+  }
     const links = <>
          <li>
               <a>Item 1</a>
@@ -49,12 +62,17 @@ function Navbar() {
            {links}
           </ul>
         </div>
+        {user ?
+         <><Button onClick={handleSignOut} variant="contained" className="p-3">Sign Out</Button></> :
+        <>
         <Link to={'/register'} className="mr-3">
         <Button variant="outlined" className="p-3">Register</Button>
         </Link>
         <Link to="/login">
         <Button variant="contained" className="p-3">Sign In</Button>
         </Link>
+        </>}
+       
       </div>
     </div>
   );
