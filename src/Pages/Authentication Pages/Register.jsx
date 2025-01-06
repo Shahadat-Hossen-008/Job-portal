@@ -1,11 +1,13 @@
 import Lottie from "lottie-react";
-import React, { useState } from "react";
-import registerLottie from "../../assets/Lottie/register.json";
+import React, { useContext, useState } from "react";
+import registerLottie from "../../assets/Lottie/Register.json";
 import { useForm } from "react-hook-form";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaRegCheckCircle, FaRegCircle } from "react-icons/fa";
 import { Button } from "@mui/material";
-import { MdDone } from "react-icons/md";
+import { Link } from "react-router-dom";
+import AuthContext from "../../Context/AuthContext/AuthContext";
 function Register() {
+  const{createUser, setUser} = useContext(AuthContext);
   const [seePassword, setSeePassword] = useState(true);
   const {
     register,
@@ -15,20 +17,33 @@ function Register() {
   } = useForm();
   const passwordValue = watch("password", "");
 
-  const characterValidate = /^(?=.*[a-z])(?=.*[A-Z])/.test(passwordValue);
+  const lowerCaseValidate = /^(?=.*[a-z])/.test(passwordValue);
+  const upperCaseValidate = /(?=.*[A-Z])/.test(passwordValue);
   const specialChValidate = /^(?=.*[\W_])/.test(passwordValue);
   const numberValidate = /^(?=.*\d)(?=.{8,})/.test(passwordValue);
   const onSubmit = (data) =>{
-    console.log(data);
+    const email = data.email;
+    const password = data.password;
+    createUser(email, password)
+    .then(userCredential=>{
+      const user = userCredential.user;
+      setUser(user);
+      console.log(user);
+      
+    })
+    .catch(error=>{
+      console.log(error.message);
+      
+    })
   }
   return (
     <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content flex-col lg:flex-row-reverse lg:ml-36">
-        <div className="text-center lg:text-left">
+      <div className="hero-content flex-col lg:flex-row-reverse">
+        <div className="text-center w-[400px]">
           <Lottie animationData={registerLottie}></Lottie>
         </div>
         <div className="card bg-base-100 w-full max-w-sm shadow-2xl p-5">
-          <h1 className="text-2xl font-bold text-center">Register</h1>
+          <h1 className="text-2xl font-bold text-center font-poppins">Register</h1>
           <form 
           onSubmit={handleSubmit(onSubmit)}
           className="card-body font-lato">
@@ -109,19 +124,23 @@ function Register() {
               </button>
               {errors.password && <span>{errors.password.message}</span>}
               <div className="p-2 mt-3 bg-orange-100 rounded-xl">
-              <div className={` ${characterValidate ? "text-green-600 flex":"text-black"}`}>
-              {characterValidate&&<MdDone className="mt-1" />}
-              At least one uppercase and lowercase</div>
-              <div className={`${specialChValidate ? "text-green-600 flex": "text-black"}`}>{specialChValidate && <MdDone className="mt-1" />}At least one special characters and one numbers</div>
-              <div className={`${numberValidate ?"text-green-600 flex":"text-black"}`}>
-              {numberValidate && <MdDone className="mt-1" />}
-              At least 8 character </div>
+              <div className={` ${lowerCaseValidate ? "text-green-600 flex items-center gap-3":"text-black flex items-center gap-3"}`}>
+              {lowerCaseValidate ? <FaRegCheckCircle /> : <FaRegCircle/>}
+              At least one lowercase</div>
+              <div className={` ${upperCaseValidate ? "text-green-600 flex items-center gap-3":"text-black flex items-center gap-3"}`}>
+              {upperCaseValidate ? <FaRegCheckCircle /> : <FaRegCircle/>}
+              At least one lowercase</div>
+              <div className={`${specialChValidate ? "text-green-600 flex items-center gap-3": "text-black flex items-center gap-3"}`}>{specialChValidate ? <FaRegCheckCircle /> : <FaRegCircle/>}At least one special characters</div>
+              <div className={`${numberValidate ?"text-green-600 flex items-center gap-3":"text-black flex items-center gap-3"}`}>
+              {numberValidate ? <FaRegCheckCircle /> : <FaRegCircle/>}
+              At least one number and Length 8 </div>
               </div>
        
             </div>
             <div className="form-control mt-6">
               <Button variant="contained" type="submit" className="btn btn-primary">Register</Button>
             </div>
+            <p>Already have an account, Please <Link to="/login" className="text-blue-400">Sign In</Link></p>
           </form>
         </div>
       </div>

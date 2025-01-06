@@ -49,10 +49,10 @@ function Navbar() {
            {links}
           </ul>
         </div>
-        <Link to={'register'} className="mr-3">
+        <Link to={'/register'} className="mr-3">
         <Button variant="outlined" className="p-3">Register</Button>
         </Link>
-        <Link>
+        <Link to="/login">
         <Button variant="contained" className="p-3">Sign In</Button>
         </Link>
       </div>
