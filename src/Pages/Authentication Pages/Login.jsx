@@ -4,11 +4,17 @@ import  { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext/AuthContext";
 import GoogleLogin from "../Shared/SocialLogin/GoogleLogin";
 
+
 function Login() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location?.state || '/';
+  // console.log(location);
+  
     const {signIn, setUser} = useContext(AuthContext);
     const [seePassword, setSeePassword] = useState(true);
     const {
@@ -22,7 +28,8 @@ function Login() {
         signIn(email, password)
         .then(result =>{
             const user = result.user;
-            console.log(user);
+            setUser(user);
+            navigate(from)
         })
         .catch(error=>{
             console.log(error.message);

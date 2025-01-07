@@ -4,12 +4,13 @@ import registerLottie from "../../assets/Lottie/Register.json";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash, FaRegCheckCircle, FaRegCircle } from "react-icons/fa";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext/AuthContext";
 import GoogleLogin from "../Shared/SocialLogin/GoogleLogin";
 function Register() {
-  const{createUser, setUser} = useContext(AuthContext);
+  const{createUser, updateUserProfile, setUser} = useContext(AuthContext);
   const [seePassword, setSeePassword] = useState(true);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,11 +26,21 @@ function Register() {
   const onSubmit = (data) =>{
     const email = data.email;
     const password = data.password;
+    const name = data.username;
+    const photoURL = data.photoURL;
     createUser(email, password)
     .then(userCredential=>{
       const user = userCredential.user;
-      setUser(user);
-      console.log(user);
+      updateUserProfile(name, photoURL)
+      .then(()=>{
+        setUser(user)
+        navigate('/');
+      })
+      .catch(err=>{
+        console.log(err.message)
+      })
+      
+      
       
     })
     .catch(error=>{
@@ -60,8 +71,8 @@ function Register() {
                   {...register("username", {
                     required: "Username is required",
                     minLength: {
-                      value: 2,
-                      message: "Username must be at least 2 characters",
+                      value: 3,
+                      message: "Username must be at least 3 characters",
                     },
                   })}
                 />
@@ -71,6 +82,29 @@ function Register() {
                   </span>
                 )}
               </div>
+              {/* phot URL */}
+              <div className="form-control">
+              <label className="label">
+                <span className="label-text">Phot URL</span>
+              </label>
+              <input
+                type="url"
+                placeholder="Enter your photo url"
+                className="input input-bordered"
+                {...register("photoURL", {
+                  required: "Photo url is required",
+                  pattern: {
+                    value: /^https?:\/\/.+/,
+                    message: "Enter a valid url",
+                  },
+                })}
+              />
+              {errors.photoURL && (
+                <span className="text-red-500 text-sm">
+                  {errors.photoURL.message}
+                </span>
+              )}
+            </div>
               {/* email */}
               <div className="form-control">
               <label className="label">
@@ -78,7 +112,7 @@ function Register() {
               </label>
               <input
                 type="email"
-                placeholder="email"
+                placeholder="Enter your email"
                 className="input input-bordered"
                 {...register("email", {
                   required: "Email is required",
@@ -102,7 +136,7 @@ function Register() {
               <input
                 type={seePassword ?  "password":"text" }
                 name="password"
-                placeholder="password"
+                placeholder="Enter your password"
                 className="input input-bordered"
                 {...register("password", {
                   required: "Password is required",
@@ -124,6 +158,7 @@ function Register() {
                 {seePassword ? <FaEyeSlash />: <FaEye /> }
               </button>
               {errors.password && <span className="text-red-600">{errors.password.message}</span>}
+              {/* Password Validation */}
               <div className="p-2 mt-3 bg-orange-100 rounded-xl">
               <div className={` ${lowerCaseValidate ? "text-green-600 flex items-center gap-3":"text-black flex items-center gap-3"}`}>
               {lowerCaseValidate ? <FaRegCheckCircle /> : <FaRegCircle/>}
@@ -139,7 +174,7 @@ function Register() {
        
             </div>
             <div className="form-control mt-6">
-              <Button variant="contained" type="submit" className="btn btn-primary">Register</Button>
+              <Button variant="contained" type="submit">Register</Button>
             </div>
             <p>Already have an account, Please <Link to="/login" className="text-blue-400">Sign In</Link></p>
           </form>

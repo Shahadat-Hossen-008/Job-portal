@@ -15,7 +15,7 @@ function Banner() {
         <motion.img
           src={team2}
           animate={{x:[100,150,100]}}
-          transition = {{duration:10, delay:5, repeat:Infinity}}
+          transition = {{duration:10, repeat:Infinity}}
           className="max-w-sm w-80 rounded-t-[40px] rounded-br-[40px] border-l-8 border-b-8 border-l-blue-700 border-b-blue-700 shadow-2xl"
         />
         </div>
